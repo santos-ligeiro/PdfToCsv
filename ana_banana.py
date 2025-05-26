@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import subprocess
+import shutil 
 
 # Check if the folder path is provided as a command-line argument
 if len(sys.argv) > 1:
@@ -104,4 +105,12 @@ alt['Animal'] = pd.Categorical(alt['Animal'], [16, 23, 10, 11, 12, 13, 14, 15, 1
 alt = alt.sort_values(by='Animal')
 alt.to_csv("./data_alt.csv", index=False)
 
+
 print("Data saved to data.csv")
+
+# Delete the ./csv folder
+try:
+    shutil.rmtree(csv_folder)
+    print(f"Folder '{csv_folder}' deleted successfully.")
+except Exception as e:
+    print(f"Error deleting folder '{csv_folder}': {e}")
