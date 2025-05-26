@@ -42,7 +42,7 @@ find "$input_folder" -type f -name "*.pdf" | while read -r file; do
   echo "$output_file" 
   
   # Convert the PDF to text using pdftotext
-  java -jar /home/eugenio/ana_banana/tabula.jar "$file" --out "$output_file"
+  java -jar ./tabula.jar "$file" --out "$output_file"
   
   ((iteration++))
   echo "Converted $file to $output_file"

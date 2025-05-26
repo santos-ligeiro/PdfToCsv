@@ -23,7 +23,7 @@ process = subprocess.Popen(['./pdf_to_csv.sh', pdf_folders, csv_folder],
 while True:
     output = process.stdout.readline()
     print(output.strip())
-    # Do something else
+
     return_code = process.poll()
     if return_code is not None:
         print('RETURN CODE', return_code)
@@ -47,6 +47,10 @@ cc = pd.DataFrame()
 # create row headers in the dataframe
 cc['header'] = pd.read_csv(file_paths[0], header=None)[0][19:46]
 
+headers = pd.read_csv(file_paths[0], header=None)[0][19:46].to_list()
+headers = ['Animal', 'Date'] + headers
+alt = pd.DataFrame(columns=headers)
+
 print("Processing csv data.")
 # insert the column per csv file
 for path in file_paths:
@@ -56,7 +60,16 @@ for path in file_paths:
     animalCell = df[0][8]
     animal = re.findall(r'\d+', animalCell)[-1]
     animal = int(animal)
-    
+
+    dateCell = df[3][3]
+    # Extract the date from the dateCell
+    date_match = re.search(r'\d{2}/\d{2}/\d{4}', dateCell)
+    if date_match:
+        date = date_match.group(0)
+    else:
+        print("Date not found in the expected format.")
+        continue
+
     # check if reticulicitos cell has value if not correct the columns
     match = re.search(r'(\d+,\d+|\d+)', df[1][38])
     if not match:
@@ -78,11 +91,17 @@ for path in file_paths:
         else:
             numbers.append(item)
 
-    cc[animal] = numbers 
+    cc[animal] = numbers
+
+    new_row = [animal, date] + numbers
+    alt = pd.concat([alt, pd.DataFrame([new_row], columns=headers)], ignore_index=True) 
 
 print("Data processed.")
 
-# print(cc)
-cc.to_csv("./conversion.csv")
+cc.to_csv("./data.csv")
 
-print("Data saved to conversion.csv")
+alt['Animal'] = pd.Categorical(alt['Animal'], [16, 23, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22])
+alt = alt.sort_values(by='Animal')
+alt.to_csv("./data_alt.csv", index=False)
+
+print("Data saved to data.csv")
