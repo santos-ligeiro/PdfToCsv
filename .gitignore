@@ -6,6 +6,7 @@ __pycache__/
 data/
 csv/
 
+*.pdf
 *.csv
 *.zip
 

@@ -101,7 +101,7 @@ print("Data processed.")
 
 cc.to_csv("./data.csv")
 
-alt['Animal'] = pd.Categorical(alt['Animal'], [16, 23, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 22])
+alt['Animal'] = pd.Categorical(alt['Animal'], [16, 23, 10, 11, 17, 18, 12, 13, 19, 20, 14, 15, 21, 22])
 alt = alt.sort_values(by='Animal')
 alt.to_csv("./data_alt.csv", index=False)
 
